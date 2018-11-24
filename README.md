@@ -1,32 +1,31 @@
 # Continous Control
 
 ## Introduction
-In this project, I trained 2 agents to play tennis. Each agent controls a rackets to hit a ball over the net. If the agent manage to do put the ball over the net, it get a reward of 0.1. But, the ball hit the ground or goes out of bounds the rewards is -0.01. Therefore, the objective of each agent is to keep the ball in play.
+In this project, I trained 2 agents to play tennis. Each agent controls a racket to hit a ball over the net. If the agent manage to put the ball over the net, it gets a reward of 0.1. But, if the ball hit the ground or goes out of bounds the rewards is -0.01. Therefore, the objective of each agent is to keep the ball in play as long as possible.
 
-
-The observation space consists of 8 variables corresponding to position and velocity of the ball and the racket. Each agent receives its own observation.
-There is only only two continous action possible:
+The observation space consists of 8 variables corresponding to the position and the velocity of the ball and the racket. Each agent receives its own observation.
+There is only only two continous actions possible:
 - moving toward or way of the net. 
 - jumping
+
 The task is episodic and in order to solve the environment, the agents must get an average score of +0.5 over 100 consecutive episodes.
 
-The score for an agent is determined at the end of an episode. It corresponds to the sum of all the rewards without discounting. 
-To evaluate the average score, I take only into account the maximum score at each episode.
+The score for an agent is determined at the end of an episode. It corresponds to the sum of all the rewards without discounting obtained during the episode. 
+To evaluate the average score, I only take into account the maximum score at each episode.
 
 
 
 ## Download the main files
-Download the repo and unzip it:
+Download the following repo and unzip it:
 https://github.com/AI2Rgross/DRL/p3_collab_compet
 
-Download the unity environment:
+Also, download the right unity environment for your computer:
     - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
     - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
     - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
     - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
  
-
-Place the zip file in the p3_collab_compet folder and unzip the file.
+Place the environment zip file in the p3_collab_compet folder and unzip it.
 
 
 ## Requirement
@@ -66,15 +65,13 @@ sudo pip3 install ipython[all]
 
 
 ## Requirements for the collab-compet project
-Go inside the collab-compet repo, and open a terminal in order to install the requirements:
+1) Go inside the collab-compet repo, and open a terminal in order to install the requirements:
 pip3 install -r requirements.txt
-Then run the next command to open a notebook:
+Then, run the next command to open a notebook:
 ipython3 notebook
 
-click on Collab_compet.ipynb to open it.
-Try to run the first cell where the libraries are imported to check if UnityEnvironment is well installed.
-
-Then, in the next cell correct the path of the Tennis.x86_64 and try running it. Be careful to use the multi-agent environment.
+2) Click on Collab_compet.ipynb to open it. Try to run the first cell where the libraries are imported to check if the UnityEnvironment is well installed.
+Then, in the next cell correct the path of the Tennis.x86_64 and try running it.
 
 env = UnityEnvironment(file_name="the/path/here/Tennis.x86_64")
 
