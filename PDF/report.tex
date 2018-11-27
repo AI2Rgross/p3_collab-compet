@@ -7,7 +7,7 @@
 \usepackage{float}
 
 \begin{document}
-\title{Notes for the continous control project}
+\title{Notes for the Collaboration and competition project}
 \date{2018\\ November}
 \author{Raphael Gross}
 \maketitle
@@ -16,12 +16,16 @@
 
 
 \section{Introduction}
-This is the second project of the Udacity DRL course. My goal for this project is to get a better understanding of continuous control with deep reinforcement learning by implementing the  Deep Deterministic Policy Gradient (DDPG) algorithm in pytorch. In order to achieve my goal, I describe briefly the main features of the DDPG method, the Reacher environment used for testing the algorithm and finally, I show the results I obtained.
+This is the third project of the Udacity DRL course. My goal for this project is to get a better understanding of multi-agents environments using deep reinforcement learning by implementing some of last variation of Deep Deterministic Policy Gradient (DDPG) in pytorch. In order to achieve my goal, I describe briefly the main features of the DDPG methods, the Tennis environment used for testing the algorithm and finally, I show the results I obtained.
 
+- ddpg: one agent, playing for both side.
+- MA-DDPG: two agents with no shared memory.
+- MA-DDPG: two agents with shared memory for the critic only.
+- MA-DDPG: two agents with shared memory for critic and actor
 
-\section{State of the Art}
+\section{State of the Art for DDPG}
 
-I used the DDPG algorithm to solve the Reacher environment. DDPG is a model-free, off-policy actor-critic algorithm that enables solving continuous action environment. 
+I used the DDPG algorithm to solve the Tennis environment. DDPG is a model-free, off-policy actor-critic algorithm that enables solving continuous action environment. 
 DDPG is based on the deterministic policy gradient or DPG \cite{LHDWR14}.
 DDPG has a parametrized actor function $\mu(s|{\theta}^{\mu})$ which specifies the current policy by deterministically mapping states to a specific action while the critic $Q(s,a)$ is learned using the Bellman equation.
 
@@ -35,11 +39,11 @@ The principal issue in continuous action space is exploration. I define the expl
 
 
 \section{Testing environment}
-The environment I used to train and test my agent is called Reacher. In this environment, the agent control a double-jointed arm. The arm needs to reach a moving target location. For each step the agent manages to touch the target location, a reward of +0.1 is provided. Thus, the goal of my agent is to maintain as long and often as possible the arm hand on the target location.
+The environment I used to train and test my agent is called Tennis. In this environment, two agents play tennis while controlling rackets. The objective is to make as many passes as possible. To achieve this objective, they need to pass the ball over a net without letting the ball touch the ground or shooting the ball out of the boundary. It is therefore a collaborative environment. For each pass done succefully, the agent get a reward of +0.1. If the agent fault the ball a reward of -0.01 is attribued.
 
-The observation space is composed of 33 variables corresponding to the position, rotation, velocity, and angular velocities of the arm. Each action is determined by a vector of dimension 4 corresponding to the torque applied to the two joints. The action vector values are between -1.0 and 1.0.
+The observation space is composed of 24 variables and each action is determined by a vector of dimension 2 corresponding to going forward or bakward and jump. The action vector values are between -1.0 and 1.0.
 
-For this project, I will use the multi-agent Unity environment. This environment is composed of 20 identical agents and each of them has its own copy of the environment. The task is episodic. After each episode, each agent gets a reward without discounting.  In order to solve the environment, the average score (all agents) needs to be greater than 30 over 100 consecutive episodes.
+For this project, I will use the multi-agent Unity environment. This environment is composed of 2 identical agents. Each of them is on one side of a tennis court. The task is episodic. After each episode, each agent gets a reward without discounting.  In order to solve the environment, the average maximum score needs to be greater than 0.5 over 100 consecutive episodes.
 
 \begin{center}
 \begin{figure}[H]
@@ -51,12 +55,9 @@ For this project, I will use the multi-agent Unity environment. This environment
 \end{center}
 
 
-\section{Results} 
-\subsection{Models}
-he DDPG method is composed of two networks one for the actor and one for the critic.
-
-\subsubsection{Actor}
-The actor-network is composed of linear layers:
+\section{Results}
+\subsection{DDPG model: naive approach} 
+The DDPG method is composed of two networks one for the actor and one for the critic. I call this version the naive approche as one agent is playing with himself.
 
 \subsubsection{Actor}
 The actor network is composed of linear layers:
@@ -70,10 +71,10 @@ The weight for the first two hidden layers is initialized using a Xavier initial
 The number of input and output nodes for the hidden layers is defined by the next parameters:
 
 \begin{itemize}
-\item $state\_size=33$
+\item $state\_size=24$
 \item $fc1\_units=256$
 \item $fc2\_units=128$
-\item $action\_size=4$
+\item $action\_size=2$
 \end{itemize}
 
 In the forward pass, $fc1$ and $fc2$ are combined with a $ReLU$ rectifier. Finally, the policy is given after injecting $fc3$ into a tanh logistic sigmoid function.
@@ -82,17 +83,17 @@ In the forward pass, $fc1$ and $fc2$ are combined with a $ReLU$ rectifier. Final
 The critic-network is composed of linear layers:
 
 \begin{itemize}
-\item $fc1 = nn.Linear(state\_size, fc1_units)$
-\item $fc2 = nn.Linear(fc1\_units+action_size, fc2_units)$
+\item $fc1 = nn.Linear(state\_size, fc1\_units)$
+\item $fc2 = nn.Linear(fc1\_units+action\_size, fc2\_units)$
 \item $fc3 = nn.Linear(fc2\_units, 1)$
 \end{itemize}
 The number of input and output nodes for the hidden layers is defined by the next parameters:
 
 \begin{itemize}
-\item $state\_size=33$
+\item $state\_size=24$
 \item $fc1\_units=256$
 \item $fc2\_units=128$
-\item $action\_size=4$
+\item $action\_size=2$
 \end{itemize}
 
 The weights for the first two hidden layers are initialized using a Xavier initialization.
@@ -123,27 +124,24 @@ The best result I obtained for the DDPG method was with the next parameters valu
 
 
 \subsection{Score}
-In Figure ~\ref{fig:average_score_all}, I plot the score fo obtained by each agent at each episode. The score corresponds to the sum of all the reward an agent obtained during an episode. The algorithm took 135 episodes to converge. 
+The maximum score is defined as the highest score between agents. The score is the sum of all the rewards an agent obtained during an episode. For the naive approach, we have technically one agent playing with himself. So we still have have two scores: one for "left side" and one for the "right side" of the net.
+
+In Figure ~\ref{fig:ddpg}, I ploted the maximum score obtained by the agents at each episode. 
+To solve the environment, the agent need to have an average score of 0.5 or above over 100 episodes. The algorythm took 1972 episodes to solve the environement with an average score for the last 100 episodes of: 0.5029000074975193.	The score for the last episode is 1.00 which corresponds to 10 sucessful exchange. Also, the agent manage do reach at multiple times a score of 2.5 during the last 100 episodes.
 
 \begin{center}
 \begin{figure}[H]
   \center
-  \includegraphics[width=0.7\textwidth]{../PNG/average_score_all.png}
-  \caption{Score for each agent}
-  \label{fig:average_score_all}
+  \includegraphics[width=0.7\textwidth]{../PNG/ddpg.png}
+  \caption{Maximum score par episode}
+  \label{fig:ddpg}
 \end{figure}
 \end{center}
 
-In Figure ~\ref{fig:average_score}, I display the mean score at each episode.
-\subsection{Score}
-\begin{center}
-\begin{figure}[H]
-  \center
-  \includegraphics[width=0.7\textwidth]{../PNG/average_score.png}
-  \caption{Average score}
-  \label{fig:average_score}
-\end{figure}
-\end{center}
+
+\subsection{MA-DDPG model: no shared memory} 
+In this section I use two independant agents. They do not share memory such as state, action or observation and both of them use the baseline DDPG algorythm.
+
 
 \subsection{Future improvement}
 For now, I only covered the DDPG\cite{LillicrapHPHETS15} algorithm. But, my ambition is to finish the PPO method\cite{ClaveraRS0AA18} I started to implement for continuous action and also look into A3C\cite{MnihBMGLHSK16}, A2C\cite{MnihBMGLHSK16} and D4PG\cite{Barth2018}. i will also try to solve other environment such as the Crawler environment.
