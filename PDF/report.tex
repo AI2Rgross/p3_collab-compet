@@ -127,7 +127,7 @@ The best result I obtained for the DDPG method was with the next parameters valu
 The maximum score is defined as the highest score between agents. The score is the sum of all the rewards an agent obtained during an episode. For the naive approach, we have technically one agent playing with himself. So we still have have two scores: one for "left side" and one for the "right side" of the net.
 
 In Figure ~\ref{fig:ddpg}, I ploted the maximum score obtained by the agents at each episode. 
-To solve the environment, the agent need to have an average score of 0.5 or above over 100 episodes. The algorythm took 1972 episodes to solve the environement with an average score for the last 100 episodes of: 0.5029000074975193.	The score for the last episode is 1.00 which corresponds to 10 sucessful exchange. Also, the agent manage do reach at multiple times a score of 2.5 during the last 100 episodes.
+To solve the environment, the agent need to have an average score of 0.5 or above over 100 episodes. The algorythm took 1972 episodes to solve the environement with an average score for the last 100 episodes of: 0.5029000074975193.	The score for the last episode is 1.00 which corresponds to 10 sucessful passes. Also, the agent manage do reach at multiple times a score of 2.5 during the last 100 episodes.
 
 \begin{center}
 \begin{figure}[H]
@@ -141,6 +141,18 @@ To solve the environment, the agent need to have an average score of 0.5 or abov
 
 \subsection{MA-DDPG model: no shared memory} 
 In this section I use two independant agents. They do not share memory such as state, action or observation and both of them use the baseline DDPG algorythm.
+
+In Figure ~\ref{fig:ma_ddpg}, I ploted the maximum score obtained by the agents at each episode. 
+The algorythm took 2165 episodes to solve the environement with an average score for the last 100 episodes of: 0.514.	The score for the last episode is 2.60 which corresponds to 26 sucessful exchanges. Also, the agents manage to reach at multiple times a score of 2.6 during the last few episodes.
+
+\begin{center}
+\begin{figure}[H]
+  \center
+  \includegraphics[width=0.7\textwidth]{../PNG/ma_ddpg.png}
+  \caption{Maximum score par episode}
+  \label{fig:ma_ddpg}
+\end{figure}
+\end{center}
 
 
 \subsection{Future improvement}
