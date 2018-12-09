@@ -4,14 +4,17 @@
 In this project, I trained 2 agents to play tennis. Each agent controls a racket to hit a ball over the net. If the agent manage to put the ball over the net, it gets a reward of 0.1. But, if the ball hit the ground or goes out of bounds the rewards is -0.01. Therefore, the objective of each agent is to keep the ball in play as long as possible.
 
 The observation space consists of 8 variables corresponding to the position and the velocity of the ball and the racket. Each agent receives its own observation.
+
 There is only only two continous actions possible:
-* moving toward or way of the net. 
+* moving toward or away of the net. 
 * jumping
 
 The task is episodic and in order to solve the environment, the agents must get an average score of +0.5 over 100 consecutive episodes.
 
 The score for an agent is determined at the end of an episode. It corresponds to the sum of all the rewards without discounting obtained during the episode. 
 To evaluate the average score, I only take into account the maximum score at each episode.
+
+![Environment](/PNG/env.png)
 
 
 
@@ -57,7 +60,7 @@ if there is any trouble have a look at:
 * Install unity
 > pip3 install unity
 
-* ipython
+* Install ipython
 In order to run the notebook with python 3 also install ipyton.
 > sudo pip3 install ipython
 
@@ -68,7 +71,7 @@ In order to run the notebook with python 3 also install ipyton.
 Then, run the next command to open a notebook:
 > ipython3 notebook*
 
-1. Click on Collab_compet.ipynb to open it. Try to run the first cell where the libraries are imported to check if the UnityEnvironment is well installed.
+2. Click on Collab_compet.ipynb to open it. Try to run the first cell where the libraries are imported to check if the UnityEnvironment is well installed.
 Then, in the next cell correct the path of the **Tennis.x86_64** and try running it.
 
 > env = UnityEnvironment(file_name=*"the/path/here/Tennis.x86_64"*)
