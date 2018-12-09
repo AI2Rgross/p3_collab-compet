@@ -16,12 +16,14 @@
 
 
 \section{Introduction}
-This is the third project of the Udacity DRL course. My goal for this project is to get a better understanding of multi-agents environments using deep reinforcement learning by implementing some of last variation of Deep Deterministic Policy Gradient (DDPG) in pytorch. In order to achieve my goal, I describe briefly the main features of the DDPG methods, the Tennis environment used for testing the algorithm and finally, I show the results I obtained.
+This is the third project of the Udacity DRL course. My goal for this project is to get a better understanding of multi-agents environments using deep reinforcement learning. I implemented some variations of the last Deep Deterministic Policy Gradient (DDPG) \cite{LillicrapHPHETS15} in pytorch. In order to achieve my goal, I explain briefly the main features of the DDPG methods. Then, I describe the Tennis environment used for testing the algorithm. Finally, I show the results I obtained.
 
-- ddpg: one agent, playing for both side.
-- MA-DDPG: two agents with no shared memory.
-- MA-DDPG: two agents with shared memory for the critic only.
-- MA-DDPG: two agents with shared memory for critic and actor
+I coded the next methods:
+\begin{itemize}
+\item DDPG: one agent, playing for both side.
+\item MA-DDPG: two agents with no shared memory with independant actor-critic.
+\item MA-DDPG: two agents with shared memory  with independant actor-critic.
+\end{itemize}
 
 \section{State of the Art for DDPG}
 
@@ -29,7 +31,7 @@ I used the DDPG algorithm to solve the Tennis environment. DDPG is a model-free,
 DDPG is based on the deterministic policy gradient or DPG \cite{LHDWR14}.
 DDPG has a parametrized actor function $\mu(s|{\theta}^{\mu})$ which specifies the current policy by deterministically mapping states to a specific action while the critic $Q(s,a)$ is learned using the Bellman equation.
 
-DDPG uses some of the advantages of DQN such as sample replay and the target network.
+DDPG uses some of the advantages of DQN \cite{mnih2015humanlevel} such as sample replay and the target network.
 Sample replay reduces correlations between sample. The replay buffer is constitued of tuples $(s,a,r,s')$  with $s$ the observations, $a$ actions, $r$ rewards and $s'$ the new states.
 I stock the interaction between agents and the environment in the same replay buffer without distinction.
 
@@ -39,17 +41,17 @@ The principal issue in continuous action space is exploration. I define the expl
 
 
 \section{Testing environment}
-The environment I used to train and test my agent is called Tennis. In this environment, two agents play tennis while controlling rackets. The objective is to make as many passes as possible. To achieve this objective, they need to pass the ball over a net without letting the ball touch the ground or shooting the ball out of the boundary. It is therefore a collaborative environment. For each pass done succefully, the agent get a reward of +0.1. If the agent fault the ball a reward of -0.01 is attribued.
+The environment I used to train and test my agent is called Tennis. In this environment, two agents play tennis while controlling rackets. The objective is to make as many passes as possible. To achieve this objective, they need to pass the ball over a net without letting the ball touch the ground or shooting the ball out of the boundaries. It is, therefore, a collaborative environment. For each successful pass, the agent gets a reward of +0.1. If the agent fault the ball, a reward of -0.01 is attributed.
 
-The observation space is composed of 24 variables and each action is determined by a vector of dimension 2 corresponding to going forward or bakward and jump. The action vector values are between -1.0 and 1.0.
+The observation space is composed of 24 variables and each action is determined by a vector of dimension 2 corresponding to going forward or backward and jump. The action vector values are between -1.0 and 1.0.
 
-For this project, I will use the multi-agent Unity environment. This environment is composed of 2 identical agents. Each of them is on one side of a tennis court. The task is episodic. After each episode, each agent gets a reward without discounting.  In order to solve the environment, the average maximum score needs to be greater than 0.5 over 100 consecutive episodes.
+For this project, I will use the multi-agent Unity environment. This environment is composed of 2 identical agents. Each of them is on one side of the tennis field. The task is episodic. After each episode, each agent gets a reward without discounting.  In order to solve the environment, the average maximum score needs to be greater than 0.5 over 100 consecutive episodes.
 
 \begin{center}
 \begin{figure}[H]
   \center
   \includegraphics[width=0.7\textwidth]{../PNG/env.png}
-  \caption{Reacher environment}
+  \caption{Tennis environment}
   \label{fig:reacher_environment}
 \end{figure}
 \end{center}
@@ -57,7 +59,7 @@ For this project, I will use the multi-agent Unity environment. This environment
 
 \section{Results}
 \subsection{DDPG model: naive approach} 
-The DDPG method is composed of two networks one for the actor and one for the critic. I call this version the naive approche as one agent is playing with himself.
+The DDPG method is composed of two networks one for the actor and one for the critic. I call this version the naive approach as one agent is playing with himself.
 
 \subsubsection{Actor}
 The actor network is composed of linear layers:
@@ -124,10 +126,10 @@ The best result I obtained for the DDPG method was with the next parameters valu
 
 
 \subsection{Score}
-The maximum score is defined as the highest score between agents. The score is the sum of all the rewards an agent obtained during an episode. For the naive approach, we have technically one agent playing with himself. So we still have have two scores: one for "left side" and one for the "right side" of the net.
+The maximum score is defined as the highest score between agents. The score is the sum of all the rewards an agent obtained during an episode. For the naive approach, we have one agent playing with himself. So we still have two scores: one for "left side" and one for the "right side" of the net.
 
-In Figure ~\ref{fig:ddpg}, I ploted the maximum score obtained by the agents at each episode. 
-To solve the environment, the agent need to have an average score of 0.5 or above over 100 episodes. The algorythm took 1972 episodes to solve the environement with an average score for the last 100 episodes of: 0.5029000074975193.	The score for the last episode is 1.00 which corresponds to 10 sucessful passes. Also, the agent manage do reach at multiple times a score of 2.5 during the last 100 episodes.
+In Figure ~\ref{fig:ddpg}, I plotted the maximum score obtained by the agents at each episode. 
+To solve the environment, the agent needs to have an average score of 0.5 or above over 100 episodes. The algorithm took 1486 episodes to solve the environment with an average score for the last 100 episodes of 0.516. The score for the last episode is 1.9 which corresponds to 19 successful passes. Also, the agent manages to reach at multiple times a score of 2.5 during the last 100 episodes.
 
 \begin{center}
 \begin{figure}[H]
@@ -140,24 +142,39 @@ To solve the environment, the agent need to have an average score of 0.5 or abov
 
 
 \subsection{MA-DDPG model: no shared memory} 
-In this section I use two independant agents. They do not share memory such as state, action or observation and both of them use the baseline DDPG algorythm.
+In this section, I use two independent agents. They do not share memory such as state, action or observation and both of them use the baseline DDPG algorithm.
 
-In Figure ~\ref{fig:ma_ddpg}, I ploted the maximum score obtained by the agents at each episode. 
-The algorythm took 2165 episodes to solve the environement with an average score for the last 100 episodes of: 0.514.	The score for the last episode is 2.60 which corresponds to 26 sucessful exchanges. Also, the agents manage to reach at multiple times a score of 2.6 during the last few episodes.
+In Figure ~\ref{fig:ma_ddpg_1}, I plotted the maximum score obtained by the agents at each episode. 
+The algorithm took 3864 episodes to solve the environment with an average score for the last 100 episodes of 0.523. The score for the last episode is 2.60 which corresponds to 26 successful exchanges. Also, the agents manage to reach at multiple times a score of 2.6 during the last few episodes.
 
 \begin{center}
 \begin{figure}[H]
   \center
-  \includegraphics[width=0.7\textwidth]{../PNG/ma_ddpg.png}
+  \includegraphics[width=0.7\textwidth]{../PNG/ma_ddpg_1.png}
   \caption{Maximum score par episode}
-  \label{fig:ma_ddpg}
+  \label{fig:ma_ddpg_1}
 \end{figure}
 \end{center}
 
+\subsection{MA-DDPG model: with shared memory} 
+In this section, I use two independent agents. They share memory such as state, action or observation and both of them use the baseline DDPG algorithm. However, the actor-critic only take the input of its associated agent.
+
+In Figure ~\ref{fig:ma_ddpg_2}, I plotted the maximum score obtained by the agents at each episode. 
+The algorithm took 2504 episodes to solve the environment with an average score for the last 100 episodes of 0.503. The score for the last episode is 2.60 which corresponds to 26 successful exchanges. Also, the agents manage to reach at multiple times a score of 2.6 during the last few episodes.
+
+\begin{center}
+\begin{figure}[H]
+  \center
+  \includegraphics[width=0.7\textwidth]{../PNG/ma_ddpg_2.png}
+  \caption{Maximum score par episode}
+  \label{fig:ma_ddpg_2}
+\end{figure}
+\end{center}
 
 \subsection{Future improvement}
-For now, I only covered the DDPG\cite{LillicrapHPHETS15} algorithm. But, my ambition is to finish the PPO method\cite{ClaveraRS0AA18} I started to implement for continuous action and also look into A3C\cite{MnihBMGLHSK16}, A2C\cite{MnihBMGLHSK16} and D4PG\cite{Barth2018}. i will also try to solve other environment such as the Crawler environment.
-\bibliography{bib}
+For now, I only covered the DDPG\cite{LillicrapHPHETS15} algorithm and some basic variations. But, my ambition is to finish the MADDPG method\cite{NIPS20177217} I started to implement. I also want to try the MADDPG on a more richer project such as the football project where the environment is not only collaborative between players of the same team but also competitive between teams.
+
+\bibliography{report}
 \bibliographystyle{plain}
 
 \end{document}
