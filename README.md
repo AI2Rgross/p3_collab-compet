@@ -89,11 +89,11 @@ Main files of the repository:
 
 * The Pytorch neural networks used to approximate the actor-critic functions used by each agent can be found in *model.py*
 
-* The weights of the pytorch model for DDPG of the solved environment for the actor and critic.
+* The weights of the pytorch model for DDPG of the solved environment for the actor and critic:
 	* checkpoint_actor.pth
 	* checkpoint_critic.pth
  
-* The weights of the pytorch model for Multi agents DDPG (without shared memory) of the solved environment for the actor and critic.
+* The weights of the pytorch model for Multi agents DDPG (without shared memory) of the solved environment for the actor and critic:
 	* agent 0:
 		* No_multi_checkpoint_actor_0.pth
 		* No_multi_checkpoint_critic_0.pth
@@ -101,7 +101,7 @@ Main files of the repository:
 		* No_multi_checkpoint_actor_1.pth
 		* No_multi_checkpoint_critic_1.pth
 
-* The weights of the pytorch model for Multi agents DDPG (with shared memory) of the solved environment for the actor and critic.
+* The weights of the pytorch model for Multi agents DDPG (with shared memory) of the solved environment for the actor and critic:
 	* agent 0:
 		* W_multi_checkpoint_actor_0.pth
 		* W_multi_checkpoint_critic_0.pth
@@ -109,13 +109,10 @@ Main files of the repository:
 		* W_multi_checkpoint_actor_1.pth
 		* W_multi_checkpoint_critic_1.pth
         
-* Installation notes and tips, brief description of the project
-        README.md
+* Installation notes and tips, brief description of the project: README.md
 
-* Udacity original readme for instalation of the environment.
-        Udacity_README.md
+* Udacity original readme for instalation of the environment: Udacity_README.md
 
-* My notes about DDPG
-        Report.pdf
+* My notes about DDPG: Report.pdf
 
 The code I developped to solve the Tennis environment is based on code of the p2_continous_control and ddpg_bipedal exercices from the UDACITY DRL github available here: https://github.com/udacity/deep-reinforcement-learning.
